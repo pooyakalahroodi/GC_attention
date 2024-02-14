@@ -6,15 +6,6 @@ from util import config, file_dir
 from graph import Graph
 from dataset import HazeData
 
-from model.MLP import MLP
-from model.LSTM import LSTM
-from model.GRU import GRU
-from model.GC_LSTM import GC_LSTM
-from model.nodesFC_GRU import nodesFC_GRU
-from model.PM25_GNN import PM25_GNN
-from model.PM25_GNN_nosub import PM25_GNN_nosub
-from model.TransformerGNN import TransformerGNN
-from model.TransformerGNN_with_PE import TransformerGNN_with_PE
 from model.GC_Transformer import GC_Transformer
 
 
@@ -54,7 +45,7 @@ dataset_num = config['experiments']['dataset_num']
 exp_model = config['experiments']['model']
 exp_repeat = config['train']['exp_repeat']
 save_npy = config['experiments']['save_npy']
-criterion = nn.MSELoss()
+criterion = nn.L1Loss()
 
 train_data = HazeData(graph, hist_len, pred_len, dataset_num, flag='Train')
 val_data = HazeData(graph, hist_len, pred_len, dataset_num, flag='Val')
