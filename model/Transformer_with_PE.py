@@ -54,18 +54,27 @@ class Transformer_with_PE(nn.Module):
     def create_city_mask(self, num_heads, num_cities, batch_size, sequence_length):
         # Initialize the mask to block all attention
         mask = torch.full((num_cities * num_heads, batch_size * sequence_length, batch_size * sequence_length), float('-inf'))
-
+    
         # Allow attention within the time steps of each city across all batches
         for city in range(num_cities):
             for head in range(num_heads):
                 mask_index = city * num_heads + head
                 for b in range(batch_size):
-                  start_idx = b * sequence_length
-                  end_idx = start_idx + sequence_length
-                  mask[mask_index, start_idx:end_idx, start_idx:end_idx] = 0
-
+                    start_idx = b * sequence_length
+                    end_idx = start_idx + sequence_length
+                    mask[mask_index, start_idx:end_idx, start_idx:end_idx] = 0
+    
+        # Future masking
+        causal_mask = torch.triu(torch.ones(sequence_length, sequence_length) * float('-inf'), diagonal=1)
+        for city in range(num_cities):
+            for head in range(num_heads):
+                mask_index = city * num_heads + head
+                for b in range(batch_size):
+                    start_idx = b * sequence_length
+                    end_idx = start_idx + sequence_length
+                    mask[mask_index, start_idx:end_idx, start_idx:end_idx] += causal_mask
+    
         return mask
-
 
 
         
