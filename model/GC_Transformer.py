@@ -75,7 +75,7 @@ class GC_Transformer(nn.Module):
 
         #print (xn.shape,feature[:, self.hist_len:self.hist_len + self.pred_len].shape )
         # Prepare the input data for the Transformer
-        x = torch.cat((xn, feature[:, self.hist_len:self.hist_len + self.pred_len]), dim=-1)
+        x = torch.cat((xn, feature[:, self.pred_len:self.hist_len + self.pred_len]), dim=-1)
     
         # Concatenate GNN output with the input data and pass it through the Transformer
         print("x shape:",x.shape,"x_gcn shape:",x_gcn.shape)
